@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-data-textures.md. Do not edited directly -->
+<!--
+Copyright 2021, GFXFundamentals.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of GFXFundamentals. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="向纹理种传入数据">
+<meta name="keywords" content="webgl webgl2 graphics">
+<meta name="thumbnail" content="https://webgl2fundamentals.org/webgl/lessons/screenshots/webgl-data-textures_zh-cn.jpg">
+
+<meta property="og:title" content="WebGL2 三维数据纹理">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webgl2fundamentals.org/webgl/lessons/screenshots/webgl-data-textures_zh-cn.jpg">
+<meta property="og:description" content="向纹理种传入数据">
+<meta property="og:url" content="https://webgl2fundamentals.org/webgl/lessons/zh_cn/webgl-data-textures.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webgl2fundamentals.org">
+<meta name="twitter:title" content="WebGL2 三维数据纹理">
+<meta name="twitter:url" content="https://webgl2fundamentals.org/webgl/lessons/zh_cn/webgl-data-textures.html">
+<meta name="twitter:description" content="向纹理种传入数据">
+<meta name="twitter:image:src" content="https://webgl2fundamentals.org/webgl/lessons/screenshots/webgl-data-textures_zh-cn.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webgl2fundamentals.org/#website",
+      "url":"https://webgl2fundamentals.org/",
+      "name":"Webgl2Fundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webgl2fundamentals.org/webgl/lessons/zh_cn/webgl-data-textures.html#primaryimage",
+      "url":"https://webgl2fundamentals.org/webgl/lessons/screenshots/webgl-data-textures_zh-cn.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webgl2fundamentals.org/webgl/lessons/zh_cn/webgl-data-textures.html#webpage",
+      "url":"https://webgl2fundamentals.org/webgl/lessons/zh_cn/webgl-data-textures.html",
+      "inLanguage":"zh-cn",
+      "name":"WebGL2 三维数据纹理",
+      "keywords":"webgl webgl2 graphics programming",
+      "isPartOf":{
+        "@id":"https://webgl2fundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webgl2fundamentals.org/webgl/lessons/zh_cn/webgl-data-textures.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
+
+
+<title>WebGL2 三维数据纹理</title>
+<link href="/webgl/lessons/resources/webgl2fundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-data-textures.html">
+  <link rel="alternate" hreflang="de" href="https://webglfundamentals.org/webgl/lessons/de/webgl-data-textures.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-data-textures.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-data-textures.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-data-textures.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-data-textures.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-data-textures.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-data-textures.html">
+
+
+
+
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-data-textures.html" >English</a>
+    <option value="/webgl/lessons/de/webgl-data-textures.html" >Deutsch</a>
+    <option value="/webgl/lessons/fr/webgl-data-textures.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-data-textures.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-data-textures.html" >한국어</a>
+    <option value="/webgl/lessons/pt-br/webgl-data-textures.html" >Português Brasileiro</a>
+    <option value="/webgl/lessons/ru/webgl-data-textures.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-data-textures.html" selected>简体中文</a>
+</select>
+
+
+    <a href="#toc">目录</a>
+    <input type="search" placeholder="?" id="search">
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/zh_cn/">WebGL2Fundamentals.org</a></h1>
+<style>
+#forkongithub>div {
+    background: #000;
+    color: #fff;
+    font-family: arial,sans-serif;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 40px;
+    font-size: 0.9rem;
+    line-height: 1.3rem;
+    position: relative;
+    transition: 0.5s;
+    display: block;
+    width: 400px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(200px) rotate(45deg) translate(10px,70px);
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+    pointer-events: auto;
+}
+#forkongithub a {
+  text-decoration: none;
+  color: #fff;
+}
+#forkongithub>div:hover {
+    background: #c11;
+    color: #fff;
+}
+#forkongithub .contributors {
+  font-size: 0.75rem;
+  background: rgba(255,255,255,0.2);
+  line-height: 1.2;
+  padding: 0.1em;
+}
+#forkongithub>div::before,#forkongithub>div::after {
+    content: "";
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    height: 1px;
+    background: #fff;
+}
+#forkongithub>div::after {
+    bottom: 1px;
+    top: auto;
+}
+
+#forkongithub{
+    z-index: 9999;
+    /* needed for firefox */
+    overflow: hidden;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    pointer-events: none;
+}
+#forkongithub svg{
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+#forkongithub img {
+  width: 1em;
+  height: 1em;
+  border-radius: 100%;
+  vertical-align: middle;
+}
+
+@media (max-width: 900px) {
+    #forkongithub>div {
+        line-height: 1.2rem;
+    }
+}
+@media (max-width: 700px) {
+  #forkongithub {
+    display: none;
+  }
+}
+@media (max-width: 410px) {
+    #forkongithub>div {
+        font-size: 0.7rem;
+        transform: translateX(150px) rotate(45deg) translate(20px,40px);
+    }
+}
+
+</style>
+<div id="forkongithub"><div><div><a href="https://github.com/gfxfundamentals/webgl2-fundamentals">Fix, Fork, Contribute <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 136 133" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(3.92891,0,0,3.92891,67.867,129.125)">
+        <path d="M0,-31.904C-8.995,-31.904 -16.288,-24.611 -16.288,-15.614C-16.288,-8.417 -11.621,-2.312 -5.148,-0.157C-4.333,-0.008 -4.036,-0.511 -4.036,-0.943C-4.036,-1.329 -4.05,-2.354 -4.058,-3.713C-8.589,-2.729 -9.545,-5.897 -9.545,-5.897C-10.286,-7.779 -11.354,-8.28 -11.354,-8.28C-12.833,-9.29 -11.242,-9.27 -11.242,-9.27C-9.607,-9.155 -8.747,-7.591 -8.747,-7.591C-7.294,-5.102 -4.934,-5.821 -4.006,-6.238C-3.858,-7.29 -3.438,-8.008 -2.972,-8.415C-6.589,-8.826 -10.392,-10.224 -10.392,-16.466C-10.392,-18.244 -9.757,-19.698 -8.715,-20.837C-8.883,-21.249 -9.442,-22.905 -8.556,-25.148C-8.556,-25.148 -7.188,-25.586 -4.076,-23.478C-2.777,-23.84 -1.383,-24.02 0.002,-24.026C1.385,-24.02 2.779,-23.84 4.08,-23.478C7.19,-25.586 8.555,-25.148 8.555,-25.148C9.444,-22.905 8.885,-21.249 8.717,-20.837C9.761,-19.698 10.392,-18.244 10.392,-16.466C10.392,-10.208 6.583,-8.831 2.954,-8.428C3.539,-7.925 4.06,-6.931 4.06,-5.411C4.06,-3.234 4.04,-1.477 4.04,-0.943C4.04,-0.507 4.333,0 5.16,-0.159C11.628,-2.318 16.291,-8.419 16.291,-15.614C16.291,-24.611 8.997,-31.904 0,-31.904" style="fill:white;"/>
+    </g>
+</svg>
+</a></div></div></div>
+
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL2 三维数据纹理</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>此文上接 WebGL2 系列文章，第一篇是<a href="webgl-fundamentals.html">基础概念</a>，
+上一篇是<a href="webgl-3d-textures.html">纹理</a>。</p>
+<p>上节中讲到了纹理的工作原理以及如何使用，我们用下载的图像创建纹理，
+在这篇文章中我们将直接用 JavaScript 创建数据。</p>
+<p>根据纹理格式，用 JavaScript 为纹理创建数据是比较直接的。 WebGL2 支持大量纹理格式。
+WebGL2 支持所有在 WebGL1 中 <em>未定义大小</em> 的格式</p>
+<div class="webgl_center">
+  <table class="tabular-data tabular-data1">
+    <thead>
+      <tr><td>格式</td><td>数据类型</td><td>通道数</td><td>单像素字节数</td></tr>
+    </thead>
+    <tbody>
+      <tr><td>RGBA</td><td>UNSIGNED_BYTE</td><td>4</td><td>4</td></tr>
+      <tr><td>RGB</td><td>UNSIGNED_BYTE</td><td>3</td><td>3</td></tr>
+      <tr><td>RGBA</td><td>UNSIGNED_SHORT_4_4_4_4</td><td>4</td><td>2</td></tr>
+      <tr><td>RGBA</td><td>UNSIGNED_SHORT_5_5_5_1</td><td>4</td><td>2</td></tr>
+      <tr><td>RGB</td><td>UNSIGNED_SHORT_5_6_5</td><td>3</td><td>2</td></tr>
+      <tr><td>LUMINANCE_ALPHA</td><td>UNSIGNED_BYTE</td><td>2</td><td>2</td></tr>
+      <tr><td>LUMINANCE</td><td>UNSIGNED_BYTE</td><td>1</td><td>1</td></tr>
+      <tr><td>ALPHA</td><td>UNSIGNED_BYTE</td><td>1</td><td>1</td></tr>
+    </tbody>
+  </table>
+</div>
+<p>它们被称为 <em>未定义大小</em> 因为它们在内部的实际表示方式在 WebGL1 中是未定义的。
+它们在 WebGL2 中被定义。 除了那些未定义大小的格式之外，还有许多定义了大小的格式，包括</p>
+<div class="webgl_center">
+  <table class="tabular-data tabular-data2">
+    <thead>
+      <tr>
+        <td>大小<br/>格式</td>
+        <td>基础<br/>格式</td>
+        <td>R<br/>位</td>
+        <td>G<br/>位</td>
+        <td>B<br/>位</td>
+        <td>A<br/>位</td>
+        <td>共享<br/>位</td>
+        <td>可渲染<br/>颜色</td>
+        <td>纹理<br/>可过滤</td>
+      </tr>
+    </thead>
+    <tbody>
+      <!--    sized                   base          r             g             b            a            shared        renderable        filterable     -->
+      <tr><td>R8             </td><td>RED  </td><td>8    </td><td>     </td><td>    </td><td>    </td><td>     </td><td>&#x25cf; </td><td>&#x25cf;</td></tr>
+      <tr><td>R8_SNORM       </td><td>RED  </td><td>s8   </td><td>     </td><td>    </td><td>    </td><td>     </td><td>         </td><td>&#x25cf;</td></tr>
+      <tr><td>RG8            </td><td>RG   </td><td>8    </td><td>8    </td><td>    </td><td>    </td><td>     </td><td>&#x25cf; </td><td>&#x25cf;</td></tr>
+      <tr><td>RG8_SNORM      </td><td>RG   </td><td>s8   </td><td>s8   </td><td>    </td><td>    </td><td>     </td><td>         </td><td>&#x25cf;</td></tr>
+      <tr><td>RGB8           </td><td>RGB  </td><td>8    </td><td>8    </td><td>8   </td><td>    </td><td>     </td><td>&#x25cf; </td><td>&#x25cf;</td></tr>
+      <tr><td>RGB8_SNORM     </td><td>RGB  </td><td>s8   </td><td>s8   </td><td>s8  </td><td>    </td><td>     </td><td>         </td><td>&#x25cf;</td></tr>
+      <tr><td>RGB565         </td><td>RGB  </td><td>5    </td><td>6    </td><td>5   </td><td>    </td><td>     </td><td>&#x25cf; </td><td>&#x25cf;</td></tr>
+      <tr><td>RGBA4          </td><td>RGBA </td><td>4    </td><td>4    </td><td>4   </td><td>4   </td><td>     </td><td>&#x25cf; </td><td>&#x25cf;</td></tr>
+      <tr><td>RGB5_A1        </td><td>RGBA </td><td>5    </td><td>5    </td><td>5   </td><td>1   </td><td>     </td><td>&#x25cf; </td><td>&#x25cf;</td></tr>
+      <tr><td>RGBA8          </td><td>RGBA </td><td>8    </td><td>8    </td><td>8   </td><td>8   </td><td>     </td><td>&#x25cf; </td><td>&#x25cf;</td></tr>
+      <tr><td>RGBA8_SNORM    </td><td>RGBA </td><td>s8   </td><td>s8   </td><td>s8  </td><td>s8  </td><td>     </td><td>         </td><td>&#x25cf;</td></tr>
+      <tr><td>RGB10_A2       </td><td>RGBA </td><td>10   </td><td>10   </td><td>10  </td><td>2   </td><td>     </td><td>&#x25cf; </td><td>&#x25cf;</td></tr>
+      <tr><td>RGB10_A2UI     </td><td>RGBA </td><td>ui10 </td><td>ui10 </td><td>ui10</td><td>ui2 </td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+      <tr><td>SRGB8          </td><td>RGB  </td><td>8    </td><td>8    </td><td>8   </td><td>    </td><td>     </td><td>         </td><td>&#x25cf;</td></tr>
+      <tr><td>SRGB8_ALPHA8   </td><td>RGBA </td><td>8    </td><td>8    </td><td>8   </td><td>8   </td><td>     </td><td>&#x25cf; </td><td>&#x25cf;</td></tr>
+      <tr><td>R16F           </td><td>RED  </td><td>f16  </td><td>     </td><td>    </td><td>    </td><td>     </td><td class="tabular-highlight">         </td><td>&#x25cf;</td></tr>
+      <tr><td>RG16F          </td><td>RG   </td><td>f16  </td><td>f16  </td><td>    </td><td>    </td><td>     </td><td class="tabular-highlight">         </td><td>&#x25cf;</td></tr>
+      <tr><td>RGB16F         </td><td>RGB  </td><td>f16  </td><td>f16  </td><td>f16 </td><td>    </td><td>     </td><td class="tabular-highlight">         </td><td>&#x25cf;</td></tr>
+      <tr><td>RGBA16F        </td><td>RGBA </td><td>f16  </td><td>f16  </td><td>f16 </td><td>f16 </td><td>     </td><td class="tabular-highlight">         </td><td>&#x25cf;</td></tr>
+      <tr><td>R32F           </td><td>RED  </td><td>f32  </td><td>     </td><td>    </td><td>    </td><td>     </td><td class="tabular-highlight">         </td><td class="tabular-highlight">        </td></tr>
+      <tr><td>RG32F          </td><td>RG   </td><td>f32  </td><td>f32  </td><td>    </td><td>    </td><td>     </td><td class="tabular-highlight">         </td><td class="tabular-highlight">        </td></tr>
+      <tr><td>RGB32F         </td><td>RGB  </td><td>f32  </td><td>f32  </td><td>f32 </td><td>    </td><td>     </td><td class="tabular-highlight">         </td><td class="tabular-highlight">        </td></tr>
+      <tr><td>RGBA32F        </td><td>RGBA </td><td>f32  </td><td>f32  </td><td>f32 </td><td>f32 </td><td>     </td><td class="tabular-highlight">         </td><td class="tabular-highlight">        </td></tr>
+      <tr><td>R11F_G11F_B10F </td><td>RGB  </td><td>f11  </td><td>f11  </td><td>f10 </td><td>    </td><td>     </td><td>         </td><td>&#x25cf;</td></tr>
+      <tr><td>RGB9_E5        </td><td>RGB  </td><td>9    </td><td>9    </td><td>9   </td><td>    </td><td>5    </td><td>         </td><td>&#x25cf;</td></tr>
+      <tr><td>R8I            </td><td>RED  </td><td>i8   </td><td>     </td><td>    </td><td>    </td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+      <tr><td>R8UI           </td><td>RED  </td><td>ui8  </td><td>     </td><td>    </td><td>    </td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+      <tr><td>R16I           </td><td>RED  </td><td>i16  </td><td>     </td><td>    </td><td>    </td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+      <tr><td>R16UI          </td><td>RED  </td><td>ui16 </td><td>     </td><td>    </td><td>    </td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+      <tr><td>R32I           </td><td>RED  </td><td>i32  </td><td>     </td><td>    </td><td>    </td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+      <tr><td>R32UI          </td><td>RED  </td><td>ui32 </td><td>     </td><td>    </td><td>    </td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+      <tr><td>RG8I           </td><td>RG   </td><td>i8   </td><td>i8   </td><td>    </td><td>    </td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+      <tr><td>RG8UI          </td><td>RG   </td><td>ui8  </td><td>ui8  </td><td>    </td><td>    </td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+      <tr><td>RG16I          </td><td>RG   </td><td>i16  </td><td>i16  </td><td>    </td><td>    </td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+      <tr><td>RG16UI         </td><td>RG   </td><td>ui16 </td><td>ui16 </td><td>    </td><td>    </td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+      <tr><td>RG32I          </td><td>RG   </td><td>i32  </td><td>i32  </td><td>    </td><td>    </td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+      <tr><td>RG32UI         </td><td>RG   </td><td>ui32 </td><td>ui32 </td><td>    </td><td>    </td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+      <tr><td>RGB8I          </td><td>RGB  </td><td>i8   </td><td>i8   </td><td>i8  </td><td>    </td><td>     </td><td>         </td><td>        </td></tr>
+      <tr><td>RGB8UI         </td><td>RGB  </td><td>ui8  </td><td>ui8  </td><td>ui8 </td><td>    </td><td>     </td><td>         </td><td>        </td></tr>
+      <tr><td>RGB16I         </td><td>RGB  </td><td>i16  </td><td>i16  </td><td>i16 </td><td>    </td><td>     </td><td>         </td><td>        </td></tr>
+      <tr><td>RGB16UI        </td><td>RGB  </td><td>ui16 </td><td>ui16 </td><td>ui16</td><td>    </td><td>     </td><td>         </td><td>        </td></tr>
+      <tr><td>RGB32I         </td><td>RGB  </td><td>i32  </td><td>i32  </td><td>i32 </td><td>    </td><td>     </td><td>         </td><td>        </td></tr>
+      <tr><td>RGB32UI        </td><td>RGB  </td><td>ui32 </td><td>ui32 </td><td>ui32</td><td>    </td><td>     </td><td>         </td><td>        </td></tr>
+      <tr><td>RGBA8I         </td><td>RGBA </td><td>i8   </td><td>i8   </td><td>i8  </td><td>i8  </td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+      <tr><td>RGBA8UI        </td><td>RGBA </td><td>ui8  </td><td>ui8  </td><td>ui8 </td><td>ui8 </td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+      <tr><td>RGBA16I        </td><td>RGBA </td><td>i16  </td><td>i16  </td><td>i16 </td><td>i16 </td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+      <tr><td>RGBA16UI       </td><td>RGBA </td><td>ui16 </td><td>ui16 </td><td>ui16</td><td>ui16</td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+      <tr><td>RGBA32I        </td><td>RGBA </td><td>i32  </td><td>i32  </td><td>i32 </td><td>i32 </td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+      <tr><td>RGBA32UI       </td><td>RGBA </td><td>ui32 </td><td>ui32 </td><td>ui32</td><td>ui32</td><td>     </td><td>&#x25cf; </td><td>        </td></tr>
+    </tbody>
+  </table>
+</div>
+<p>还有这些深度和模板格式
+And these depth and stencil formats as well</p>
+<div class="webgl_center">
+  <table class="tabular-data tabular-data3">
+    <thead>
+      <tr>
+        <td>大小<br/>格式</td>
+        <td>基本<br/>格式</td>
+        <td>深度<br/>位</td>
+        <td>模板<br/>位</td>
+      </tr>
+    </thead>
+    <tbody>
+      <!--    sized                       base                     d            s         -->
+      <tr><td>DEPTH_COMPONENT16  </td><td>DEPTH_COMPONENT </td><td>16  </td><td>   </td></tr>
+      <tr><td>DEPTH_COMPONENT24  </td><td>DEPTH_COMPONENT </td><td>24  </td><td>   </td></tr>
+      <tr><td>DEPTH_COMPONENT32F </td><td>DEPTH_COMPONENT </td><td>f32 </td><td>   </td></tr>
+      <tr><td>DEPTH24_STENCIL8   </td><td>DEPTH_STENCIL   </td><td>24  </td><td>ui8</td></tr>
+      <tr><td>DEPTH32F_STENCIL8  </td><td>DEPTH_STENCIL   </td><td>f32 </td><td>ui8</td></tr>
+    </tbody>
+  </table>
+</div>
+<p>Legend:</p>
+<ul>
+<li>单个数字比如 <code class="notranslate" translate="no">8</code> 表示 8 位将归一化为 0 到 1</li>
+<li>前面有 <code class="notranslate" translate="no">s</code> 的数字比如 <code class="notranslate" translate="no">s8</code> 表示一个有符号的 8 位数字，将归一化为 -1 到 1</li>
+<li>前面有 <code class="notranslate" translate="no">f</code> 的数字比如 <code class="notranslate" translate="no">f16</code> 表示浮点数。</li>
+<li>前面有 <code class="notranslate" translate="no">i</code> 的数字比如 <code class="notranslate" translate="no">i8</code> 表示整数。</li>
+<li>前面有 <code class="notranslate" translate="no">ui</code> 的数字比如 <code class="notranslate" translate="no">ui8</code> 表示无符号整数。</li>
+</ul>
+<p>我们不会在此处使用此信息， 但我 <span class="tabular-highlight">突出显示</span>
+了 half 和 float 纹理格式以显示与 WebGL1 的不同，它们始终在 WebGL2 中可用，
+但默认情况下它们未标记为可渲染颜色和/或可过滤纹理。
+不可渲染意味着它们不能被渲染。 <a href="webgl-render-to-texture.html">渲染到纹理将在另一课中介绍</a>。不可过滤纹理意味着它们必须仅用于 <code class="notranslate" translate="no">gl.NEAREST</code> 。这两个特性都可以作为 WebGL2 中的可选扩展。</p>
+<p>对于每种格式，你都指定 <em>内部格式</em> (GPU 将在内部使用的格式)以及您提供给 WebGL 的数据的 <em>格式</em> 和 <em>类型</em> 。这是你提供给内部格式的数据的 <em>格式</em> 和 <em>类型</em></p>
+<div class="webgl_center">
+  <table class="tabular-data tabular-data4">
+    <thead>
+      <tr>
+        <td>内部<br/>格式</td>
+        <td>格式</td>
+        <td>类型</td>
+        <td>每像素<br/>源字节数</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>RGBA8<br/>RGB5_A1<br/>RGBA4<br/>SRGB8_ALPHA8    </td><td>RGBA            </td><td>UNSIGNED_BYTE                  </td><td>4  </td></tr>
+      <tr><td>RGBA8_SNORM                                     </td><td>RGBA            </td><td>BYTE                           </td><td>4  </td></tr>
+      <tr><td>RGBA4                                           </td><td>RGBA            </td><td>UNSIGNED_SHORT_4_4_4_4         </td><td>2  </td></tr>
+      <tr><td>RGB5_A1                                         </td><td>RGBA            </td><td>UNSIGNED_SHORT_5_5_5_1         </td><td>2  </td></tr>
+      <tr><td>RGB10_A2<br/>RGB5_A1                            </td><td>RGBA            </td><td>UNSIGNED_INT_2_10_10_10_REV    </td><td>4  </td></tr>
+      <tr><td>RGBA16F                                         </td><td>RGBA            </td><td>HALF_FLOAT                     </td><td>8  </td></tr>
+      <tr><td>RGBA32F<br/>RGBA16F                             </td><td>RGBA            </td><td>FLOAT                          </td><td>16 </td></tr>
+      <tr><td>RGBA8UI                                         </td><td>RGBA_INTEGER    </td><td>UNSIGNED_BYTE                  </td><td>4  </td></tr>
+      <tr><td>RGBA8I                                          </td><td>RGBA_INTEGER    </td><td>BYTE                           </td><td>4  </td></tr>
+      <tr><td>RGBA16UI                                        </td><td>RGBA_INTEGER    </td><td>UNSIGNED_SHORT                 </td><td>8  </td></tr>
+      <tr><td>RGBA16I                                         </td><td>RGBA_INTEGER    </td><td>SHORT                          </td><td>8  </td></tr>
+      <tr><td>RGBA32UI                                        </td><td>RGBA_INTEGER    </td><td>UNSIGNED_INT                   </td><td>16 </td></tr>
+      <tr><td>RGBA32I                                         </td><td>RGBA_INTEGER    </td><td>INT                            </td><td>16 </td></tr>
+      <tr><td>RGB10_A2UI                                      </td><td>RGBA_INTEGER    </td><td>UNSIGNED_INT_2_10_10_10_REV    </td><td>4  </td></tr>
+      <tr><td>RGB8<br/>RGB565<br/>SRGB8                       </td><td>RGB             </td><td>UNSIGNED_BYTE                  </td><td>3  </td></tr>
+      <tr><td>RGB8_SNORM                                      </td><td>RGB             </td><td>BYTE                           </td><td>3  </td></tr>
+      <tr><td>RGB565                                          </td><td>RGB             </td><td>UNSIGNED_SHORT_5_6_5           </td><td>2  </td></tr>
+      <tr><td>R11F_G11F_B10F                                  </td><td>RGB             </td><td>UNSIGNED_INT_10F_11F_11F_REV   </td><td>4  </td></tr>
+      <tr><td>RGB9_E5                                         </td><td>RGB             </td><td>UNSIGNED_INT_5_9_9_9_REV       </td><td>4  </td></tr>
+      <tr><td>RGB16F<br/>R11F_G11F_B10F<br/>RGB9_E5           </td><td>RGB             </td><td>HALF_FLOAT                     </td><td>6  </td></tr>
+      <tr><td>RGB32F<br/>RGB16F<br/>R11F_G11F_B10F<br/>RGB9_E5</td><td>RGB             </td><td>FLOAT                          </td><td>12 </td></tr>
+      <tr><td>RGB8UI                                          </td><td>RGB_INTEGER     </td><td>UNSIGNED_BYTE                  </td><td>3  </td></tr>
+      <tr><td>RGB8I                                           </td><td>RGB_INTEGER     </td><td>BYTE                           </td><td>3  </td></tr>
+      <tr><td>RGB16UI                                         </td><td>RGB_INTEGER     </td><td>UNSIGNED_SHORT                 </td><td>6  </td></tr>
+      <tr><td>RGB16I                                          </td><td>RGB_INTEGER     </td><td>SHORT                          </td><td>6  </td></tr>
+      <tr><td>RGB32UI                                         </td><td>RGB_INTEGER     </td><td>UNSIGNED_INT                   </td><td>12 </td></tr>
+      <tr><td>RGB32I                                          </td><td>RGB_INTEGER     </td><td>INT                            </td><td>12 </td></tr>
+      <tr><td>RG8                                             </td><td>RG              </td><td>UNSIGNED_BYTE                  </td><td>2  </td></tr>
+      <tr><td>RG8_SNORM                                       </td><td>RG              </td><td>BYTE                           </td><td>2  </td></tr>
+      <tr><td>RG16F                                           </td><td>RG              </td><td>HALF_FLOAT                     </td><td>4  </td></tr>
+      <tr><td>RG32F<br/>RG16F                                 </td><td>RG              </td><td>FLOAT                          </td><td>8  </td></tr>
+      <tr><td>RG8UI                                           </td><td>RG_INTEGER      </td><td>UNSIGNED_BYTE                  </td><td>2  </td></tr>
+      <tr><td>RG8I                                            </td><td>RG_INTEGER      </td><td>BYTE                           </td><td>2  </td></tr>
+      <tr><td>RG16UI                                          </td><td>RG_INTEGER      </td><td>UNSIGNED_SHORT                 </td><td>4  </td></tr>
+      <tr><td>RG16I                                           </td><td>RG_INTEGER      </td><td>SHORT                          </td><td>4  </td></tr>
+      <tr><td>RG32UI                                          </td><td>RG_INTEGER      </td><td>UNSIGNED_INT                   </td><td>8  </td></tr>
+      <tr><td>RG32I                                           </td><td>RG_INTEGER      </td><td>INT                            </td><td>8  </td></tr>
+      <tr><td>R8                                              </td><td>RED             </td><td>UNSIGNED_BYTE                  </td><td>1  </td></tr>
+      <tr><td>R8_SNORM                                        </td><td>RED             </td><td>BYTE                           </td><td>1  </td></tr>
+      <tr><td>R16F                                            </td><td>RED             </td><td>HALF_FLOAT                     </td><td>2  </td></tr>
+      <tr><td>R32F<br/>R16F                                   </td><td>RED             </td><td>FLOAT                          </td><td>4  </td></tr>
+      <tr><td>R8UI                                            </td><td>RED_INTEGER     </td><td>UNSIGNED_BYTE                  </td><td>1  </td></tr>
+      <tr><td>R8I                                             </td><td>RED_INTEGER     </td><td>BYTE                           </td><td>1  </td></tr>
+      <tr><td>R16UI                                           </td><td>RED_INTEGER     </td><td>UNSIGNED_SHORT                 </td><td>2  </td></tr>
+      <tr><td>R16I                                            </td><td>RED_INTEGER     </td><td>SHORT                          </td><td>2  </td></tr>
+      <tr><td>R32UI                                           </td><td>RED_INTEGER     </td><td>UNSIGNED_INT                   </td><td>4  </td></tr>
+      <tr><td>R32I                                            </td><td>RED_INTEGER     </td><td>INT                            </td><td>4  </td></tr>
+      <tr><td>DEPTH_COMPONENT16                               </td><td>DEPTH_COMPONENT </td><td>UNSIGNED_SHORT                 </td><td>2  </td></tr>
+      <tr><td>DEPTH_COMPONENT24<br/>DEPTH_COMPONENT16         </td><td>DEPTH_COMPONENT </td><td>UNSIGNED_INT                   </td><td>4  </td></tr>
+      <tr><td>DEPTH_COMPONENT32F                              </td><td>DEPTH_COMPONENT </td><td>FLOAT                          </td><td>4  </td></tr>
+      <tr><td>DEPTH24_STENCIL8                                </td><td>DEPTH_STENCIL   </td><td>UNSIGNED_INT_24_8              </td><td>4  </td></tr>
+      <tr><td>DEPTH32F_STENCIL8                               </td><td>DEPTH_STENCIL   </td><td>FLOAT_32_UNSIGNED_INT_24_8_REV </td><td>8  </td></tr>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  &lt;tr&gt;&lt;td&gt;RGBA                                            &lt;/td&gt;&lt;td&gt;RGBA            &lt;/td&gt;&lt;td&gt;UNSIGNED_BYTE                  &lt;/td&gt;&lt;td&gt;4  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;RGBA                                            &lt;/td&gt;&lt;td&gt;RGBA            &lt;/td&gt;&lt;td&gt;UNSIGNED_SHORT_4_4_4_4         &lt;/td&gt;&lt;td&gt;2  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;RGBA                                            &lt;/td&gt;&lt;td&gt;RGBA            &lt;/td&gt;&lt;td&gt;UNSIGNED_SHORT_5_5_5_1         &lt;/td&gt;&lt;td&gt;2  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;RGB                                             &lt;/td&gt;&lt;td&gt;RGB             &lt;/td&gt;&lt;td&gt;UNSIGNED_BYTE                  &lt;/td&gt;&lt;td&gt;3  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;RGB                                             &lt;/td&gt;&lt;td&gt;RGB             &lt;/td&gt;&lt;td&gt;UNSIGNED_SHORT_5_6_5           &lt;/td&gt;&lt;td&gt;2  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;LUMINANCE_ALPHA                                 &lt;/td&gt;&lt;td&gt;LUMINANCE_ALPHA &lt;/td&gt;&lt;td&gt;UNSIGNED_BYTE                  &lt;/td&gt;&lt;td&gt;2  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;LUMINANCE                                       &lt;/td&gt;&lt;td&gt;LUMINANCE       &lt;/td&gt;&lt;td&gt;UNSIGNED_BYTE                  &lt;/td&gt;&lt;td&gt;1  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;ALPHA                                           &lt;/td&gt;&lt;td&gt;ALPHA           &lt;/td&gt;&lt;td&gt;UNSIGNED_BYTE                  &lt;/td&gt;&lt;td&gt;1  &lt;/td&gt;&lt;/tr&gt;
+
+&lt;/tbody&gt;
+</code></pre>
+  </table>
+</div>
+<p>让我们创建一个 3×2 像素的 <code class="notranslate" translate="no">R8</code> 纹理， 因为是 <code class="notranslate" translate="no">R8</code> 纹理，
+所以在红色通道里每个像素只有一个值</p>
+<p>我们继续使用<a href="webgl-3d-textures.html">上篇文章</a>中的例子，首先修改纹理坐标，每个面使用整个纹理</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 填充立方体纹理坐标的缓冲
+function setTexcoords(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([
+        // 正面
+        0, 0,
+        0, 1,
+        1, 0,
+        1, 0,
+        0, 1,
+        1, 1,
+        ...
+</code></pre>
+<p>然后修改代码创建一个纹理</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 创建一个纹理
+var texture = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, texture);
+
+-// 用 1x1 的蓝色像素填充纹理
+-gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+-              new Uint8Array([0, 0, 255, 255]));
+
+// 用 3x2 的像素填充纹理
+const level = 0;
+const internalFormat = gl.R8;
+const width = 3;
+const height = 2;
+const border = 0;
+const format = gl.RED;
+const type = gl.UNSIGNED_BYTE;
+const data = new Uint8Array([
+  128,  64, 128,
+    0, 192,   0,
+]);
+gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, width, height, border,
+              format, type, data);
+
+// 设置筛选器，我们不需要使用贴图所以就不用筛选器了
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+-// 异步加载图像
+-...
+</code></pre>
+<p>这是结果</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-data-texture-3x2-bad.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-data-texture-3x2-bad.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>哦！为什么不管用？！？！！</p>
+<p>查看 JavaScript 控制台看到这样的错误信息</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">WebGL: INVALID_OPERATION: texImage2D: ArrayBufferView not big enough for request
+</code></pre>
+<p>结果是 WebGL 中有一种首次创建 OpenGL 后的模糊设定，
+计算机有时在数据为某些特定大小时速度会快一些，
+例如一次拷贝 2，4 或 8 个字节比一次拷贝 1 个字节要快，
+WebGL 默认使用 4 字节长度，所以它期望每一行数据是多个 4 字节数据（最后一行除外）。</p>
+<p>我们之前的数据每行只有 3 个字节，总共为 6 字节，
+但是 WebGL 试图在第一行获取 4 个字节，第二行获取 3 个字节，
+总共 7 个字节，所以会出现这样的报错。</p>
+<p>我们可以告诉 WebGL 一次处理 1 个字节</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">const alignment = 1;
+gl.pixelStorei(gl.UNPACK_ALIGNMENT, alignment);
+</code></pre>
+<p>有效参数为 1，2，4 和 8.</p>
+<p>我觉得你可能无法计算出对齐数据和非对齐数据的速度区别，
+所以希望默认值是 1 而不是 4， 这样这个问题就不会困扰新手，
+但是为了适配 OpenGL，所以要保留相同的默认设置，这样移植应用就不用改变行数，
+然后可以为新的应用在需要的地方设置属性为 1。</p>
+<p>有了这个设置后就能正常运行了</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-data-texture-3x2.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-data-texture-3x2.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>有着这些基础就可以讲<a href="webgl-render-to-texture.html">渲染到材质</a>了。</p>
+<div class="webgl_bottombar">
+<h3>Pixel vs Texel</h3>
+<p>有时纹理上的像素叫 texels，像素是图片元素的简写，Texel 是纹理元素的简写。
+</p>
+<p>我知道我可能会收到一些图形学大师的牢骚，但是我所说的 "texel" 是一种行话。
+我通常在使用纹理的元素时不假思索的使用了“像素”这个词。 &#x1f607;
+</p>
+</div>
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-data-textures.html" >English</a>
+    <option value="/webgl/lessons/de/webgl-data-textures.html" >Deutsch</a>
+    <option value="/webgl/lessons/fr/webgl-data-textures.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-data-textures.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-data-textures.html" >한국어</a>
+    <option value="/webgl/lessons/pt-br/webgl-data-textures.html" >Português Brasileiro</a>
+    <option value="/webgl/lessons/ru/webgl-data-textures.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-data-textures.html" selected>简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>基础概念</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-getting-webgl2.html">怎样使用WebGL2</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">基本原理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">如何工作的</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-shaders-and-glsl.html">着色器和 GLSL 语言</a></li>
+<li><a href="/webgl/lessons/resources/webgl-state-diagram.html?lang=zh_cn">WebGL2 State Diagram</a></li>
+        </ul>
+  <li>WebGL2 vs WebGL1</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl2-whats-new.html">WebGL2有什么新内容</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl1-to-webgl2.html">迁移WebGL1到WebGL2</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl1-to-webgl2-fundamentals.html">WebGLFundamentals.org和WebGL2Fundamentals.org的区别</a></li>
+        </ul>
+  <li>图像处理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-image-processing.html">图像处理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-image-processing-continued.html">进一步处理图像</a></li>
+        </ul>
+  <li>二维平移，旋转，缩放和矩阵运算</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-translation.html">二维平移</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-rotation.html">二维旋转</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-scale.html">二维缩放</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrices.html">二维矩阵</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-orthographic.html">三维正射投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective.html">三维透视投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-camera.html">三维相机</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-matrix-naming.html">WebGL2 三维矩阵命名</a></li>
+        </ul>
+  <li>光照</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-directional.html">三维方向光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-point.html">点光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-spot.html">聚光灯</a></li>
+        </ul>
+  <li>组织和重构</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-less-code-more-fun.html">码少趣多</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-multiple-things.html">绘制多个物体</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-scene-graph.html">场景图</a></li>
+        </ul>
+  <li>几何</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html">三维几何加工</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-load-obj.html">加载 .obj 文件</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-load-obj-w-mtl.html">加载带 .mtl 的 .obj 文件</a></li>
+        </ul>
+  <li>纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-textures.html">纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-data-textures.html">数据纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2-textures.html">使用多个纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-cors-permission.html">跨域图像</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective-correct-texturemapping.html">纹理映射的透视纠正</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-planar-projection-mapping.html">平面的和透视的投影映射</a></li>
+        </ul>
+  <li>渲染到纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-render-to-texture.html">渲染到纹理</a></li>
+        </ul>
+  <li>阴影</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-shadows.html">阴影</a></li>
+        </ul>
+  <li>技术</li>
+        <ul>
+            <li>二维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-drawimage.html">二维 DrawImage</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html">二维矩阵栈</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-sprites.html">精灵</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-cube-maps.html">WebGL2 立方体贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-environment-maps.html">WebGL2 环境贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skybox.html">WebGL2 天空盒</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skinning.html">WebGL2 蒙皮</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-fog.html">WebGL2 雾</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-picking.html">拾取（点击物体）</a></li>
+        </ul>
+  <li>文字</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-text-html.html">文字 - HTML</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-canvas2d.html">文字 - 二维 Canvas</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-texture.html">文字 - 使用纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-glyphs.html">文字 - 使用字形纹理</a></li>
+        </ul>
+  <li>GPGPU</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-gpgpu.html">通用GPU计算(GPGPU)</a></li>
+        </ul>
+        </ul>
+  <li>技巧</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-smallest-programs.html">最小的程序</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-without-data.html">无数据绘制</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-shadertoy.html">Shadertoy</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-pulling-vertices.html">顶点拉取</a></li>
+        </ul>
+  <li>优化</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-indexed-vertices.html">顶点索引 (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-instanced-drawing.html">实例化绘制</a></li>
+        </ul>
+  <li>杂项</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-setup-and-installation.html">设置和安装</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-boilerplate.html">样板</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-resizing-the-canvas.html">重置画布尺寸</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-animation.html">动画</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-points-lines-triangles.html">点、线段与三角形</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-multiple-views.html">多视图与多画布</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html">可视化相机</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-and-alpha.html">WebGL2 和 Alpha</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-vs-3d-library.html">2D vs 3D 库</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-anti-patterns.html">反模式</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-matrix-vs-math.html">WebGL2中的矩阵vs数学中的矩阵</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-precision-issues.html">精度问题</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#screenshot">Taking a screenshot</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#preservedrawingbuffer">Prevent the Canvas Being Cleared</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#tabindex">Get Keyboard Input From a Canvas</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#html-background">Use WebGL2 as Background in HTML</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-cross-platform-issues.html">跨平台问题</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-qna.html">Questions and Answers</a></li>
+        </ul>
+  <li>参考</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-attributes.html">属性（Attributes）</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-texture-units.html">纹理单元（Texture Units）</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-framebuffers.html">帧缓冲区（Framebuffers）</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-readpixels.html">readPixels</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-references.html">参考资料</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">API帮助文档</a></li>
+  <li><a href="https://twgljs.org">TWGL，一个轻量级WebGL辅助库</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl2-fundamentals">GitHub</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        
+<div>有意见或建议? <a href="https://github.com/gfxfundamentals/webgl2-fundamentals/issues">在GitHub上提issue</a>.</div>
+  
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webgl2fundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL2 三维数据纹理';
+            var disqus_title = 'WebGL2 三维数据纹理';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webgl2fundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script>
+const settings = {
+  contribTemplate: "感谢 <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>的 <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} 个贡献</a>",
+  owner: "gfxfundamentals",
+  repo: "webgl2-fundamentals",
+};
+</script>
+<script src="/contributors.js"></script>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
+<script>
+</script>
+
+
+</html>
+
+
+
