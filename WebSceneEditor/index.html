@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editor de Cena - WebGL2</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="menu-edicao">
+    <h2>Menu</h2>
+    <p>Em breve: lista de instâncias da cena e campos de transformação.</p>
+  </div>
+
+  <div id="area-cena">
+    <canvas id="canvas-cena" width="800" height="600"></canvas>
+  </div>
+
+  <div id="menu-modelos">
+    <h2>Seleção de modelos</h2>
+    <p>Em breve: lista de modelos disponíveis para adicionar à cena.</p>
+  </div>
+
+  <!-- Libs do webgl2-fundamentals -->
+  <script src="js/m4.js"></script>
+  <script src="js/resources/twgl-full.min.js"></script>
+  <script src="js/resources/obj-parser.js"></script>
+
+  <!-- Código do projeto, na ordem de dependência -->
+  <script src="js/renderer.js"></script>
+  <script src="js/modelLoader.js"></script>
+  <script src="js/scene.js"></script>
+  <script src="js/modelMenu.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+/* Menu esquerdo: edição de transformações da instância selecionada */
+#menu-edicao {
+  width: 250px;
+  flex-shrink: 0;
+  background-color: #f0f0f0;
+  border-right: 2px solid #ccc;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+/* Área central: onde o canvas WebGL2 fica */
+#area-cena {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1e1e1e;
+  overflow: hidden;
+}
+
+#canvas-cena {
+  background-color: #2b2b2b;
+  border: 1px solid #444;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Menu direito: seleção de modelos disponíveis */
+#menu-modelos {
+  width: 250px;
+  flex-shrink: 0;
+  background-color: #f0f0f0;
+  border-left: 2px solid #ccc;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+#menu-edicao h2,
+#menu-modelos h2 {
+  font-size: 16px;
+  margin-top: 0;
+}
+
+#menu-edicao p,
+#menu-modelos p {
+  font-size: 13px;
+  color: #666;
+}
+
+/* Botões de modelo no menu direito (Fase 3) */
+.model-button {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 6px;
+  background-color: #fff;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 13px;
+}
+
+.model-button:hover {
+  background-color: #e0e0ff;
+}
