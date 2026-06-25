@@ -4,10 +4,22 @@
 //cada item é uma instância da cena. não guarda geometria, apenas uma referência para o modelo.
 
 const sceneObjects = [];
+// contador para evitar id repetido
+let nextObjectId = 1; 
+
+//conta quantas instancias do mesmo modelo foram criadas
+const modelInstanceCounts = {};
+
+let selectedObjectId = null;
 
 function addSceneObject(modelName, translation = [0, 0, 0]) {
+
+  modelInstanceCounts[modelName] = (modelInstanceCounts[modelName] || 0) + 1;
+  const instanceNumber = modelInstanceCounts[modelName];
+
   const sceneObject = {
-    id: sceneObjects.length + 1,
+    id: nextObjectId++,
+    label: `${modelName} #${instanceNumber}`,
     modelName,
     translation: [...translation],
     rotation: [0, 0, 0],   // radianos, eixos x/y/z
@@ -15,6 +27,27 @@ function addSceneObject(modelName, translation = [0, 0, 0]) {
   };
   sceneObjects.push(sceneObject);
   return sceneObject;
+}
+
+//Renive instancia da cena pelo id.
+function removeSceneObject(id) {
+  const index = sceneObjects.findIndex(obj => obj.id === id);
+  if(index === -1) return;
+  sceneObjects.splice(index, 1);
+  if (selectedObjectId === id) {
+    selectedObjectId = null;
+  }
+}
+
+// seleciona uma instancia
+
+function selectSceneObject(id){
+  selectedObjectId = id;
+}
+
+//devolve objeto da instancia
+function getSelectedSceneObject() {
+  return sceneObjects.find(obj => obj.id === selectedObjectId) || null;
 }
 
 //calcula a matriz de mundo de um objeto da cena a partir de sua posição, rotação e escala.
@@ -47,4 +80,4 @@ function computeSceneRadius() {
   }
  
   return maxDistance > 0 ? maxDistance : 10;
-}
+} 

@@ -8,7 +8,8 @@ if(!gl) {
     
   initRenderer(gl);
   buildModelMenu(gl);
- 
+  refreshEditMenu();
+   
   function frame() {
     const sceneRadius = computeSceneRadius();
     drawScene(gl, sceneRadius);

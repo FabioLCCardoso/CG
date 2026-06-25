@@ -91,6 +91,7 @@ let programInfo;
 let defaultTextures; 
 
 function initRenderer(gl){
+    twgl.setAttributePrefix("a_");
     programInfo = twgl.createProgramInfo(gl, [vs, fs]);
     gl.enable(gl.DEPTH_TEST); //objetos mais próximos escondem os distantes
     gl.enable(gl.CULL_FACE); // não renderiza a parte de trás dos triangulos 
@@ -111,7 +112,7 @@ function computeCamera(gl, sceneRadius) {
     const zFar = sceneRadius * 10;
     const projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
     const cameraTarget = [0, 0, 0];
-    const cameraPosition = [0, 30, 100];
+    const cameraPosition = [0, sceneRadius * 0.4, sceneRadius * 1.5];
     const up = [0, 1, 0];
     const cameraMatrix = m4.lookAt(cameraPosition, cameraTarget, up);
     const viewMatrix = m4.inverse(cameraMatrix);
@@ -122,7 +123,7 @@ function computeCamera(gl, sceneRadius) {
     
 // desenha todos objetos da cena. 
 
-function drawScene(gl, viewProjectionMatrix) {
+function drawScene(gl, sceneRadius) {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   gl.clearColor(0.1, 0.1, 0.2, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -147,7 +148,12 @@ function drawScene(gl, viewProjectionMatrix) {
     if (!model) continue; // ainda não terminou de carregar
  
     const worldMatrix = computeWorldMatrix(sceneObject);
- 
+
+    /*console.log("desenhando", sceneObject.modelName, "worldMatrix:", worldMatrix, "partes:", model.parts.length);
+    console.log("canvas size:", gl.canvas.width, gl.canvas.height, "client:", gl.canvas.clientWidth, gl.canvas.clientHeight);
+    console.log("sceneRadius:", sceneRadius, "cameraPosition:", cameraPosition);
+    console.log("projectionMatrix:", Array.from(projectionMatrix));
+    console.log("viewMatrix:", Array.from(viewMatrix)); */
     for (const part of model.parts) {
       gl.bindVertexArray(part.vao);
       // twgl.setUniforms aceita múltiplos objetos de uniforms (aqui passa u_world, e o material na mesma chamada);

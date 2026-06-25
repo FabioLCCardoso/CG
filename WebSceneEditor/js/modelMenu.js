@@ -25,9 +25,16 @@ function buildModelMenu(gl) {
       await loadModel(gl, modelDef.name, modelDef.objUrl);
  
       //cria uma NOVA instância na cena, em uma posição levemente aleatória para múltiplas instâncias não ficarem exatamente sobrepostas.
+      /* ------> SPAWN EM POSIÇõES ALEATÓRIAS 
       const x = (Math.random() - 0.5) * 40;
       const z = (Math.random() - 0.5) * 40;
-      addSceneObject(modelDef.name, [x, 0, z]);
+      addSceneObject(modelDef.name, [x, 0, z]); */
+
+      addSceneObject(modelDef.name, [0, 0, 0]); // SPAWN NO CENTRO DA CENA
+      //console.log("sceneObjects agora:", JSON.stringify(sceneObjects));
+      //console.log("modelo carregado?", loadedModels[modelDef.name]);
+
+      refreshEditMenu();
     });
  
     container.appendChild(button);
