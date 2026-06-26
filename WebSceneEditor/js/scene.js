@@ -24,6 +24,7 @@ function addSceneObject(modelName, translation = [0, 0, 0]) {
     translation: [...translation],
     rotation: [0, 0, 0],   // radianos, eixos x/y/z
     scale: [1, 1, 1],
+    parentId: null, // id do objeto pai, se houver
   };
   sceneObjects.push(sceneObject);
   return sceneObject;
@@ -36,6 +37,14 @@ function removeSceneObject(id) {
   sceneObjects.splice(index, 1);
   if (selectedObjectId === id) {
     selectedObjectId = null;
+  }
+
+
+  //Se for pai de outras instancias, remove a referencia de pai das instancias filhas
+  for (const obj of sceneObjects) {
+    if (obj.parentId === id) {
+      obj.parentId = null;
+    }
   }
 }
 
@@ -50,9 +59,47 @@ function getSelectedSceneObject() {
   return sceneObjects.find(obj => obj.id === selectedObjectId) || null;
 }
 
-//calcula a matriz de mundo de um objeto da cena a partir de sua posição, rotação e escala.
+//busca uma instancia pelo id (navega até o pai)
+function getSceneObjectById(id) {
+  return sceneObjects.find(obj => obj.id === id) || null;
+}
 
-function computeWorldMatrix(sceneObject) {
+//verifica de candidateId pode se tornar pai de objectId sem criar um ciclo.
+
+function wouldCreateCycle(objectId, candidateParentId) {
+  let current = candidateParentId;
+  while (current !== null) {
+    if (current === objectId) return true;
+    const parent = getSceneObjectById(current);
+    current = parent ? parent.parentId : null;
+  }
+  return false;
+
+}
+
+//define o pai de uma instancia, rejeita tentativas do objeto ser o proprio pai ou criar um ciclo.
+function setSceneObjectParent(objectId, parentId) {
+  if (objectId === parentId) {
+    console.warn("Um objeto não pode ser pai de si mesmo.");
+    return false;
+  }
+  if(parentId !== null && wouldCreateCycle(objectId, parentId)) {
+    console.warn("Não é possível criar um ciclo na hierarquia de objetos.");
+    return false;
+  }
+
+  const obj = getSceneObjectById(objectId);
+  if(!obj) return false;
+
+  obj.parentId = parentId;
+  return true;
+
+}
+
+
+//calcula a matriz local de um objeto (sem considerar pais) da cena a partir de sua posição, rotação e escala.
+
+function computeLocalMatrix(sceneObject) {
   let matrix = m4.translation(...sceneObject.translation);
   matrix = m4.xRotate(matrix, sceneObject.rotation[0]);
   matrix = m4.yRotate(matrix, sceneObject.rotation[1]);
@@ -61,23 +108,52 @@ function computeWorldMatrix(sceneObject) {
   return matrix;
 }
 
-//calcula um raio aproximado da cena inteira, soma posição de cada instancia com o raio do modelo para se enquadrar automaticamente.
+// calcula a matriz de mundo de um objeto. considera cadeia de pais. recursão subindo a árvore de pais.
+function computeWorldMatrix(sceneObject){
+  const localMatrix = computeLocalMatrix(sceneObject);
+  if(sceneObject.parentId === null) {
+    return localMatrix;
+  }
 
+  const parent = getSceneObjectById(sceneObject.parentId);
+  if(!parent) {
+    console.warn("Objeto pai não encontrado para id:", sceneObject.parentId);
+    return localMatrix;
+  }
+
+  const parentMatrix = computeWorldMatrix(parent);
+  return m4.multiply(parentMatrix, localMatrix);
+
+}
+
+//calcula um raio aproximado da cena inteira, soma posição de cada instancia com o raio do modelo para se enquadrar automaticamente.
+//usa a worldmatrix para considerar a posição de cada instancia.
 function computeSceneRadius() {
+
   if (sceneObjects.length === 0) {
     return 10;
   }
- 
   let maxDistance = 0;
+
   for (const sceneObject of sceneObjects) {
+
     const model = loadedModels[sceneObject.modelName];
+
     if (!model) continue;
- 
-    const distanceFromOrigin = m4.length(sceneObject.translation);
+
+
+
+    const worldMatrix = computeWorldMatrix(sceneObject);
+
+    // A posição mundial fica nos índices 12,13,14 da matriz 4x4
+
+    const worldPosition = [worldMatrix[12], worldMatrix[13], worldMatrix[14]];
+    const distanceFromOrigin = m4.length(worldPosition);
     const objectScale = Math.max(...sceneObject.scale);
     const reach = distanceFromOrigin + model.radius * objectScale;
     maxDistance = Math.max(maxDistance, reach);
   }
- 
   return maxDistance > 0 ? maxDistance : 10;
 } 
+
+ 
