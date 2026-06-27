@@ -25,6 +25,7 @@ function addSceneObject(modelName, translation = [0, 0, 0]) {
     rotation: [0, 0, 0],   // radianos, eixos x/y/z
     scale: [1, 1, 1],
     parentId: null, // id do objeto pai, se houver
+    animation: null,
   };
   sceneObjects.push(sceneObject);
   return sceneObject;
@@ -124,6 +125,17 @@ function computeWorldMatrix(sceneObject){
   const parentMatrix = computeWorldMatrix(parent);
   return m4.multiply(parentMatrix, localMatrix);
 
+}
+
+//atualiza animações de todas instancias com ela ativa. 
+function updateAnimations(deltaTime) {
+  for(const sceneObject of sceneObjects) {
+    if(!sceneObject.animation) continue;
+
+    const axisIndex = { x: 0, y: 1, z: 2 }[sceneObject.animation.axis];
+    sceneObject.rotation[axisIndex] += sceneObject.animation.speed * deltaTime;
+
+}
 }
 
 //calcula um raio aproximado da cena inteira, soma posição de cada instancia com o raio do modelo para se enquadrar automaticamente.

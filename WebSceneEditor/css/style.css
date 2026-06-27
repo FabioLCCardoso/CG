@@ -64,7 +64,7 @@ body {
   color: #666;
 }
 
-/* Botões de modelo no menu direito (Fase 3) */
+/* Botões de modelo no menu direito  */
 .model-button {
   display: block;
   width: 100%;
@@ -298,7 +298,7 @@ body {
 
 }
 
-/* Seletor de pai (Fase 6 - hierarquia) */
+/* Seletor de pai  */
 .parent-selector-wrapper {
   margin-bottom: 14px;
 }
@@ -317,4 +317,50 @@ body {
   border: 1px solid #aaa;
   border-radius: 3px;
   background-color: #fff;
+}
+
+/* Painel de animação */
+.animation-panel {
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+  margin-top: 4px;
+}
+
+.animation-panel > label {
+  display: block;
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.animation-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.animation-checkbox-row label {
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.animation-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.animation-controls label {
+  font-size: 11px;
+  color: #888;
+}
+
+.animation-controls select,
+.animation-controls input {
+  padding: 4px;
+  font-size: 12px;
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  margin-bottom: 6px;
 }

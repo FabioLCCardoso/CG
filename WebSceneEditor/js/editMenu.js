@@ -112,9 +112,104 @@ function buildTransformPanel(sceneObject) {
     (axis, value) => { sceneObject.scale[axis] = value; },
     { min: 0.1, max: 5, step: 0.05 },
   ));
- 
+  
+  panel.appendChild(buildAnimationPanel(sceneObject));
+
   return panel;
 }
+
+//Painel de animação
+function buildAnimationPanel(sceneObject) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "animation-panel";
+
+  const title = document.createElement("label");
+  title.textContent = "Animação";
+  wrapper.appendChild(title);
+
+  const checkboxRow = document.createElement("div");
+  checkboxRow.className = "animation-checkbox-row";
+
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.id = "animation-enabled-" + sceneObject.id;
+  checkbox.checked = sceneObject.animation !== null;
+
+  const checkboxLabel = document.createElement("label");
+  checkboxLabel.textContent = "Girar continuamente";
+  checkboxLabel.setAttribute("for", checkbox.id);
+  checkboxRow.appendChild(checkbox);
+  checkboxRow.appendChild(checkboxLabel);
+  wrapper.appendChild(checkboxRow);
+
+  // Container dos controles de eixo/velocidade, só visível quando a animação está ativa
+
+  const controls = document.createElement("div");
+  controls.className = "animation-controls";
+  controls.style.display = sceneObject.animation ? "flex" : "none";
+
+  const axisLabel = document.createElement("label");
+  axisLabel.textContent = "Eixo";
+
+  const axisSelect = document.createElement("select");
+  for (const axis of ["x", "y", "z"]) {
+    const option = document.createElement("option");
+    option.value = axis;
+    option.textContent = axis.toUpperCase();
+
+    if (sceneObject.animation && sceneObject.animation.axis === axis) {
+      option.selected = true;
+    }
+    axisSelect.appendChild(option);
+  }
+
+
+
+  const speedLabel = document.createElement("label");
+  speedLabel.textContent = "Velocidade (radianos/s)";
+
+  const speedInput = document.createElement("input");
+  speedInput.type = "number";
+  speedInput.step = "0.1";
+  speedInput.value = sceneObject.animation ? sceneObject.animation.speed : 1.2;
+
+
+  function applyAnimationFromControls() {
+    sceneObject.animation = {
+      axis: axisSelect.value,
+      speed: parseFloat(speedInput.value) || 0,
+    };
+  }
+
+  axisSelect.addEventListener("change", applyAnimationFromControls);
+  speedInput.addEventListener("input", applyAnimationFromControls);
+
+  checkbox.addEventListener("change", () => {
+    if (checkbox.checked) {
+      controls.style.display = "flex";
+      applyAnimationFromControls();
+    } else {
+      controls.style.display = "none";
+      sceneObject.animation = null;
+    }
+
+  });
+
+  controls.appendChild(axisLabel);
+  controls.appendChild(axisSelect);
+  controls.appendChild(speedLabel);
+  controls.appendChild(speedInput);
+  wrapper.appendChild(controls);
+
+  return wrapper;
+
+}
+
+
+
+
+
+
 
 //seletor de pai
 function buildParentSelector(sceneObject) {

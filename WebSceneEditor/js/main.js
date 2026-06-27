@@ -9,8 +9,17 @@ if(!gl) {
   initRenderer(gl);
   buildModelMenu(gl);
   refreshEditMenu();
+
+  let then = 0;
    
-  function frame() {
+  function frame(now) {
+   
+   now *= 0.001;  // converte para segundos
+   const deltaTime = now - then;
+   then = now;
+
+   updateAnimations(deltaTime);
+   
     const sceneRadius = computeSceneRadius();
     drawScene(gl, sceneRadius);
     requestAnimationFrame(frame);
