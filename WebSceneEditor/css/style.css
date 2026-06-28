@@ -364,3 +364,26 @@ body {
   border-radius: 3px;
   margin-bottom: 6px;
 }
+
+/* Botões de salvar/carregar cena  */
+.scene-io-controls {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #ccc;
+}
+
+.scene-io-button {
+  flex: 1;
+  padding: 7px 4px;
+  font-size: 12px;
+  background-color: #fff;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.scene-io-button:hover {
+  background-color: #e0e0ff;
+}

@@ -139,6 +139,7 @@ function initRenderer(gl){
     }
 
     initPickingFramebuffer(gl);
+    initGizmo(gl);
 }
 
 //cria a textura de 1x1 pixel e o framebuffer onde o picking vai desenhar.
@@ -231,7 +232,42 @@ function drawScene(gl, sceneRadius) {
       twgl.drawBufferInfo(gl, part.bufferInfo);
     }
   }
+    drawGizmo(gl, projectionMatrix, viewMatrix, cameraPosition);
 }
+
+function computeNarrowPickingProjection(gl, cssX, cssY) {
+
+  const fieldOfViewRadians = 60 * Math.PI / 180;
+  const near = lastCamera.near;
+  const far = lastCamera.far;
+
+  const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  const top = Math.tan(fieldOfViewRadians * 0.5) * near;
+  const bottom = -top;
+  const left = aspect * bottom;
+  const right = aspect * top;
+  const width = right - left;
+  const height = top - bottom;
+
+  const pixelX = cssX * gl.canvas.width / gl.canvas.clientWidth;
+  const pixelY = gl.canvas.height - cssY * gl.canvas.height / gl.canvas.clientHeight - 1;
+
+  const subLeft = left + pixelX * width / gl.canvas.width;
+  const subBottom = bottom + pixelY * height / gl.canvas.height;
+  const subWidth = width / gl.canvas.width;
+  const subHeight = height / gl.canvas.height;
+  const projectionMatrix = m4.frustum(
+
+    subLeft, subLeft + subWidth,
+    subBottom, subBottom + subHeight,
+    near, far,
+  );
+
+  return { projectionMatrix };
+
+}
+
+
 
 
 function pickObjectAt(gl, cssX, cssY) {

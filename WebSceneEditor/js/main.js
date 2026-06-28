@@ -25,7 +25,7 @@ if(!gl) {
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
-
+ /*
   canvas.addEventListener("click", (event) => {
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
@@ -34,6 +34,44 @@ if(!gl) {
     const pickedId = pickObjectAt(gl, x, y);
     selectSceneObject(pickedId);
     refreshEditMenu();
+  }); */ 
+
+  function getCanvasMousePos(event) {
+
+    const rect = canvas.getBoundingClientRect();
+    return [event.clientX - rect.left, event.clientY - rect.top];
+    
+  }
+
+
+
+  canvas.addEventListener("mousedown", (event) => {
+
+    const [x, y] = getCanvasMousePos(event);
+
+    const gizmoAxis = pickGizmoAxisAt(gl, x, y);
+    if (gizmoAxis) {
+      startGizmoDrag(gl, gizmoAxis, x, y);
+      return; 
+    }
+    const pickedId = pickObjectAt(gl, x, y);
+    selectSceneObject(pickedId);
+    refreshEditMenu();
+  });
+
+
+
+  window.addEventListener("mousemove", (event) => {
+    if (!isDragging()) return;
+    const [x, y] = getCanvasMousePos(event);
+    updateGizmoDrag(x, y);
+  });
+
+  window.addEventListener("mouseup", () => {
+    const wasDragging = endGizmoDrag();
+    if (wasDragging) {
+      refreshEditMenu();
+    }
   });
 
   console.log("Inicialização completa. Clique em um modelo no menu à direita.");

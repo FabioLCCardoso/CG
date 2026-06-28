@@ -6,15 +6,68 @@ translação/rotação/escala */
 function refreshEditMenu(){
     const container = document.getElementById("menu-edicao");
     container.innerHTML = "<h2>Menu</h2>";
- 
+
+    container.appendChild(buildSceneIOControls());
     container.appendChild(buildInstanceList());
- 
+    
     const selected = getSelectedSceneObject();
      if (selected) {
         container.appendChild(buildTransformPanel(selected));
   }
 
 }
+ // botões para salvar/carregar cena.
+function buildSceneIOControls() {
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "scene-io-controls";
+
+  const saveButton = document.createElement("button");
+  saveButton.textContent = "Salvar cena";
+  saveButton.className = "scene-io-button";
+  saveButton.addEventListener("click", () => {
+    saveSceneToFile("cena.json");
+  });
+
+
+
+  const loadButton = document.createElement("button");
+  loadButton.textContent = "📂 Carregar cena";
+  loadButton.className = "scene-io-button";
+
+  const fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.accept = ".json,application/json";
+  fileInput.style.display = "none";
+
+
+  loadButton.addEventListener("click", () => {
+    fileInput.click();
+  });
+
+
+
+  fileInput.addEventListener("change", async () => {
+    const file = fileInput.files[0];
+
+    if (!file) return;
+    
+    try {
+      await loadSceneFromFile(gl, file);
+      refreshEditMenu();
+    } catch (err) {
+      alert("Não foi possível carregar a cena: " + err.message);
+    }
+
+    fileInput.value = "";
+  });
+
+  wrapper.appendChild(saveButton);
+  wrapper.appendChild(loadButton);
+  wrapper.appendChild(fileInput);
+  return wrapper;
+}
+
 
 //cria a lista de instâncias da cena, cada linha tem um botão com o label da instancia
  function buildInstanceList() {
