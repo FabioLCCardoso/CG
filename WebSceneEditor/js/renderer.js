@@ -86,13 +86,50 @@ void main() {
 }
 `;
 
+// Shader do picking. posiciona o vértice e pinta tudo com uma cor, sem cor nem textura.
+const pickingVS = `#version 300 es
+
+in vec4 a_position;
+uniform mat4 u_projection;
+uniform mat4 u_view;
+uniform mat4 u_world;
+
+void main() {
+  gl_Position = u_projection * u_view * u_world * a_position;
+}
+`;
+
+const pickingFS = `#version 300 es
+precision highp float;
+
+uniform vec4 u_id;
+
+out vec4 outColor;
+
+void main() {
+  outColor = u_id;
+}
+`;
+
+
 
 let programInfo;
 let defaultTextures; 
 
+let pickingProgramInfo;
+
+//Framebuffer + textura 1x1 pro picking. não renderiza a cena inteira em alta resolução, cria uma "camera" que só enxerga o ponteiro do mouse.
+let pickingFramebuffer;
+let pickingTexture;
+let pickingDepthBuffer;
+
+// Guarda a camera calculada no ultimo drawScene pra função do picking usar exatamente a mesam camera do frame atual.
+let lastCamera = null; 
+
 function initRenderer(gl){
     twgl.setAttributePrefix("a_");
     programInfo = twgl.createProgramInfo(gl, [vs, fs]);
+    pickingProgramInfo = twgl.createProgramInfo(gl, [pickingVS, pickingFS]);
     gl.enable(gl.DEPTH_TEST); //objetos mais próximos escondem os distantes
     gl.enable(gl.CULL_FACE); // não renderiza a parte de trás dos triangulos 
 
@@ -100,6 +137,38 @@ function initRenderer(gl){
         defaultWhite: twgl.createTexture(gl, { src: [255, 255, 255, 255] }),
         defaultNormal: twgl.createTexture(gl, { src: [127, 127, 255, 0] }),
     }
+
+    initPickingFramebuffer(gl);
+}
+
+//cria a textura de 1x1 pixel e o framebuffer onde o picking vai desenhar.
+function initPickingFramebuffer(gl) {
+  pickingTexture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, pickingTexture);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+  pickingDepthBuffer = gl.createRenderbuffer();
+  gl.bindRenderbuffer(gl.RENDERBUFFER, pickingDepthBuffer);
+
+  setPickingFramebufferSize(gl, 1, 1);
+
+  pickingFramebuffer = gl.createFramebuffer();
+  gl.bindFramebuffer(gl.FRAMEBUFFER, pickingFramebuffer);
+  gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, pickingTexture, 0);
+  gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, pickingDepthBuffer);
+
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+}
+
+function setPickingFramebufferSize(gl, width, height){
+  gl.bindTexture(gl.TEXTURE_2D, pickingTexture);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+  gl.bindRenderbuffer(gl.RENDERBUFFER, pickingDepthBuffer);
+  gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, width, height);
 }
 
 function computeCamera(gl, sceneRadius) {
@@ -117,7 +186,7 @@ function computeCamera(gl, sceneRadius) {
     const cameraMatrix = m4.lookAt(cameraPosition, cameraTarget, up);
     const viewMatrix = m4.inverse(cameraMatrix);
 
-    return {projectionMatrix, viewMatrix, cameraPosition};
+    return {projectionMatrix, viewMatrix, cameraPosition, near:zNear, far:zFar};
 
 }
     
@@ -128,7 +197,8 @@ function drawScene(gl, sceneRadius) {
   gl.clearColor(0.1, 0.1, 0.2, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
- const { projectionMatrix, viewMatrix, cameraPosition } = computeCamera(gl, sceneRadius);
+ const { projectionMatrix, viewMatrix, cameraPosition, near, far } = computeCamera(gl, sceneRadius);
+ lastCamera = { projectionMatrix, viewMatrix, cameraPosition, near, far };
 
   gl.useProgram(programInfo.program);
  
@@ -163,3 +233,82 @@ function drawScene(gl, sceneRadius) {
   }
 }
 
+
+function pickObjectAt(gl, cssX, cssY) {
+  if(!lastCamera) return null;
+
+  const fieldOfViewRadians = 60 * Math.PI / 180;
+  const near = lastCamera.near;
+  const far = lastCamera.far;
+
+  const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  const top = Math.tan(fieldOfViewRadians * 0.5) * near;
+  const bottom = -top;
+  const left = aspect * bottom;
+  const right = aspect * top;
+  const width = right - left;
+  const height = top - bottom;
+
+  const pixelX = cssX * gl.canvas.width / gl.canvas.clientWidth;
+  const pixelY = gl.canvas.height - cssY * gl.canvas.height / gl.canvas.clientHeight - 1;
+  
+  const subLeft = left + pixelX * width / gl.canvas.width;
+  const subBottom = bottom + pixelY * height / gl.canvas.height;
+  const subWidth = width / gl.canvas.width;
+  const subHeight = height / gl.canvas.height;
+
+    const pickingProjectionMatrix = m4.frustum(
+    subLeft, subLeft + subWidth,
+    subBottom, subBottom + subHeight,
+    near, far,
+  );
+
+  
+  gl.bindFramebuffer(gl.FRAMEBUFFER, pickingFramebuffer);
+  gl.viewport(0, 0, 1, 1);
+  gl.enable(gl.DEPTH_TEST);
+  gl.enable(gl.CULL_FACE);
+  gl.clearColor(0, 0, 0, 0); // id 0 = "nenhum objeto"
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  gl.useProgram(pickingProgramInfo.program);
+
+  twgl.setUniforms(pickingProgramInfo, {
+    u_projection: pickingProjectionMatrix,
+    u_view: lastCamera.viewMatrix,
+  });
+
+  for (const sceneObject of sceneObjects) {
+    const model = loadedModels[sceneObject.modelName];
+    if (!model) continue;
+    const worldMatrix = computeWorldMatrix(sceneObject);
+
+    // Codifica o id  como uma cor RGBA, 1 byte por canal.
+
+    const id = sceneObject.id;
+
+    const idColor = [
+      ((id >> 0) & 0xFF) / 0xFF,
+      ((id >> 8) & 0xFF) / 0xFF,
+      ((id >> 16) & 0xFF) / 0xFF,
+      ((id >> 24) & 0xFF) / 0xFF,
+    ];
+
+
+
+    for (const part of model.parts) {
+      gl.bindVertexArray(part.vao);
+      twgl.setUniforms(pickingProgramInfo, { u_world: worldMatrix, u_id: idColor });
+      twgl.drawBufferInfo(gl, part.bufferInfo);
+    }
+  }
+
+  const pixelData = new Uint8Array(4);
+  gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixelData);
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+  const pickedId = pixelData[0] | (pixelData[1] << 8) | (pixelData[2] << 16) | (pixelData[3] << 24);
+  return pickedId === 0 ? null : pickedId;
+
+
+}

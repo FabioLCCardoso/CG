@@ -25,7 +25,17 @@ if(!gl) {
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
- 
+
+  canvas.addEventListener("click", (event) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    const pickedId = pickObjectAt(gl, x, y);
+    selectSceneObject(pickedId);
+    refreshEditMenu();
+  });
+
   console.log("Inicialização completa. Clique em um modelo no menu à direita.");
 
 }
