@@ -158,31 +158,43 @@ const availableModels = [
 function buildModelMenu(gl) {
   const container = document.getElementById("menu-modelos");
  
-  // limpa o texto placeholder ("Em breve: ...") que está no HTML
   container.innerHTML = "<h2>Seleção de modelos</h2>";
  
   for (const modelDef of availableModels) {
     const button = document.createElement("button");
-    button.textContent = modelDef.label;
     button.className = "model-button";
+ 
+    const icon = document.createElement("img");
+    icon.className = "model-icon";
+    icon.alt = modelDef.label;
+    // Placeholder 
+    icon.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Crect width='96' height='96' fill='%23444'/%3E%3C/svg%3E";
+ 
+    const labelSpan = document.createElement("span");
+    labelSpan.className = "model-label";
+    labelSpan.textContent = modelDef.label;
+ 
+    button.appendChild(icon);
+    button.appendChild(labelSpan);
  
     button.addEventListener("click", async () => {
       // Se já estiver em loadedModels, loadModel devolve o cache direto, sem rebaixar nem recriar buffers.
       await loadModel(gl, modelDef.name, modelDef.objUrl);
  
-      //cria uma NOVA instância na cena, em uma posição levemente aleatória para múltiplas instâncias não ficarem exatamente sobrepostas.
-      /* ------> SPAWN EM POSIÇõES ALEATÓRIAS 
-      const x = (Math.random() - 0.5) * 40;
-      const z = (Math.random() - 0.5) * 40;
-      addSceneObject(modelDef.name, [x, 0, z]); */
-
-      addSceneObject(modelDef.name, [0, 0, 0]); // SPAWN NO CENTRO DA CENA
-      //console.log("sceneObjects agora:", JSON.stringify(sceneObjects));
-      //console.log("modelo carregado?", loadedModels[modelDef.name]);
-
+      // Nova instância nasce na origem 
+      addSceneObject(modelDef.name, [0, 0, 0]);
+ 
       refreshEditMenu();
     });
  
     container.appendChild(button);
+ 
+    // Geração da thumbnail acontece em segundo plano 
+    getModelThumbnail(modelDef).then(dataUrl => {
+      if (dataUrl) {
+        icon.src = dataUrl;
+      }
+    });
   }
 }
+
