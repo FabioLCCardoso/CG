@@ -1,0 +1,316 @@
+{
+  "version": 1,
+  "objects": [
+    {
+      "id": 1,
+      "label": "tileLarge_teamBlue #1",
+      "modelName": "tileLarge_teamBlue",
+      "translation": [
+        0,
+        -1.6399377744026644,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        2.25,
+        1,
+        3
+      ],
+      "parentId": null,
+      "animation": null
+    },
+    {
+      "id": 2,
+      "label": "tileLow_teamRed #1",
+      "modelName": "tileLow_teamRed",
+      "translation": [
+        -5.186968711499136,
+        0.9289849865001829,
+        7.870461530583163
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "parentId": null,
+      "animation": null
+    },
+    {
+      "id": 3,
+      "label": "tileLow_teamRed #2",
+      "modelName": "tileLow_teamRed",
+      "translation": [
+        -2.440149422101323,
+        2.005436967892332,
+        4.872362370083069
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1.95,
+        1,
+        1.9
+      ],
+      "parentId": null,
+      "animation": null
+    },
+    {
+      "id": 5,
+      "label": "swiper_teamRed #1",
+      "modelName": "swiper_teamRed",
+      "translation": [
+        0.1515511848623894,
+        1.0483821185273623,
+        -0.37327101332970036
+      ],
+      "rotation": [
+        12.62025239999999,
+        482.06964119990556,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "parentId": 3,
+      "animation": {
+        "axis": "y",
+        "speed": 1.2
+      }
+    },
+    {
+      "id": 6,
+      "label": "powerupBlock_teamRed #1",
+      "modelName": "powerupBlock_teamRed",
+      "translation": [
+        -1.7760541781155132,
+        4.060000282107916,
+        -0.7119099248811638
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        2.35,
+        1.3,
+        3.2
+      ],
+      "parentId": null,
+      "animation": null
+    },
+    {
+      "id": 7,
+      "label": "ring_teamRed #1",
+      "modelName": "ring_teamRed",
+      "translation": [
+        0,
+        0.40888772381950855,
+        -0.06784922479976616
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "parentId": 6,
+      "animation": null
+    },
+    {
+      "id": 8,
+      "label": "powerupBomb #1",
+      "modelName": "powerupBomb",
+      "translation": [
+        -1.5531533156322777,
+        7.163059459157658,
+        -4.322211886834394
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "parentId": null,
+      "animation": null
+    },
+    {
+      "id": 9,
+      "label": "star #1",
+      "modelName": "star",
+      "translation": [
+        -1.5616171694868886,
+        7.392563087158121,
+        -1.9267289095012252
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "parentId": null,
+      "animation": null
+    },
+    {
+      "id": 10,
+      "label": "heart_teamRed #1",
+      "modelName": "heart_teamRed",
+      "translation": [
+        0,
+        6.440950308127849,
+        -5.452400289224394
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "parentId": null,
+      "animation": null
+    },
+    {
+      "id": 11,
+      "label": "openchest #1",
+      "modelName": "openchest",
+      "translation": [
+        0,
+        -0.5864564431220398,
+        -14.258419182556715
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "parentId": null,
+      "animation": null
+    },
+    {
+      "id": 12,
+      "label": "barrel #1",
+      "modelName": "barrel",
+      "translation": [
+        -0.04022001543488818,
+        -0.5897285530919573,
+        -14.718714777720356
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "parentId": null,
+      "animation": null
+    },
+    {
+      "id": 14,
+      "label": "floor #1",
+      "modelName": "floor",
+      "translation": [
+        15.858753105829923,
+        -0.6478777988193004,
+        -6.40273034598683
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "parentId": null,
+      "animation": null
+    },
+    {
+      "id": 15,
+      "label": "brickwallwithbars #1",
+      "modelName": "brickwallwithbars",
+      "translation": [
+        -12.560066280291393,
+        -0.7222290081887177,
+        -5.6830347373437275
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "parentId": null,
+      "animation": null
+    },
+    {
+      "id": 16,
+      "label": "bars #1",
+      "modelName": "bars",
+      "translation": [
+        23.6,
+        0,
+        4.3
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "parentId": 15,
+      "animation": null
+    }
+  ]
+}

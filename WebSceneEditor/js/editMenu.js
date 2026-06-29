@@ -32,7 +32,7 @@ function buildSceneIOControls() {
 
 
   const loadButton = document.createElement("button");
-  loadButton.textContent = "📂 Carregar cena";
+  loadButton.textContent = " Carregar cena";
   loadButton.className = "scene-io-button";
 
   const fileInput = document.createElement("input");
