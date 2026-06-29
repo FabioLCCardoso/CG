@@ -45,6 +45,12 @@ if(!gl) {
 
 
 
+  // Estado do "arrastar para orbitar a câmera"
+  
+  let isOrbiting = false;
+  let lastMouseX = 0;
+  let lastMouseY = 0;
+
   canvas.addEventListener("mousedown", (event) => {
 
     const [x, y] = getCanvasMousePos(event);
@@ -57,14 +63,30 @@ if(!gl) {
     const pickedId = pickObjectAt(gl, x, y);
     selectSceneObject(pickedId);
     refreshEditMenu();
+
+    // Clique em área vazia (pickedId null) e não pegou o gizmo:
+    // começa a orbitar a câmera a partir daqui.
+    if (pickedId === null) {
+      isOrbiting = true;
+      lastMouseX = x;
+      lastMouseY = y;
+    }
   });
 
 
 
   window.addEventListener("mousemove", (event) => {
-    if (!isDragging()) return;
-    const [x, y] = getCanvasMousePos(event);
-    updateGizmoDrag(x, y);
+    if (isDragging()) {
+      const [x, y] = getCanvasMousePos(event);
+      updateGizmoDrag(x, y);
+      return;
+    }
+    if (isOrbiting) {
+      const [x, y] = getCanvasMousePos(event);
+      orbitCamera(x - lastMouseX, y - lastMouseY);
+      lastMouseX = x;
+      lastMouseY = y;
+    }
   });
 
   window.addEventListener("mouseup", () => {
@@ -72,7 +94,14 @@ if(!gl) {
     if (wasDragging) {
       refreshEditMenu();
     }
+    isOrbiting = false;
   });
+
+  canvas.addEventListener("wheel", (event) => {
+    event.preventDefault();
+    const sceneRadius = computeSceneRadius();
+    zoomCamera(event.deltaY, sceneRadius);
+  }, { passive: false });
 
   console.log("Inicialização completa. Clique em um modelo no menu à direita.");
 

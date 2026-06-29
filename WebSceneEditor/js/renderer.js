@@ -181,8 +181,10 @@ function computeCamera(gl, sceneRadius) {
     const zNear = sceneRadius / 100;
     const zFar = sceneRadius * 10;
     const projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
-    const cameraTarget = [0, 0, 0];
-    const cameraPosition = [0, sceneRadius * 0.4, sceneRadius * 1.5];
+    
+    autoFrameIfNeeded(sceneRadius);
+    const cameraPosition = computeOrbitalCameraPosition();
+    const cameraTarget = cameraState.target;
     const up = [0, 1, 0];
     const cameraMatrix = m4.lookAt(cameraPosition, cameraTarget, up);
     const viewMatrix = m4.inverse(cameraMatrix);
